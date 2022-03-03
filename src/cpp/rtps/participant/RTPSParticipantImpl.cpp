@@ -1234,8 +1234,8 @@ void RTPSParticipantImpl::update_attributes(
                         {
                             modified_servers.emplace_back(incoming_server.GetParticipant());
                             logInfo(RTPS_QOS_CHECK,
-                                    "DS Server: " << incoming_server.guidPrefix << " has modified its locators: " 
-                                    << incoming_locator << " being added")
+                                    "DS Server: " << incoming_server.guidPrefix << " has modified its locators: "
+                                                  << incoming_locator << " being added")
                         }
                     }
                     contained = true;
