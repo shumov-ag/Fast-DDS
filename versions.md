@@ -1,3 +1,8 @@
+Versions 2.6.0
+--------------
+
+* Allow modifying the remote server locator in runtime.
+
 Version 2.5.0
 -------------
 
