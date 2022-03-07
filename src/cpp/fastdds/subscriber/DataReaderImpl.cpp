@@ -1619,6 +1619,12 @@ ReturnCode_t DataReaderImpl::delete_contained_entities()
     return ReturnCode_t::RETCODE_OK;
 }
 
+void DataReaderImpl::filter_has_been_updated(
+        const ContentFilteredTopicImpl& topic)
+{
+    update_rtps_reader_qos();
+}
+
 } /* namespace dds */
 } /* namespace fastdds */
 } /* namespace eprosima */
