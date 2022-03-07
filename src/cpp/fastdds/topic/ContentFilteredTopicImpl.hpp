@@ -71,6 +71,8 @@ public:
         readers_.erase(reader);
     }
 
+    void update_signature();
+
     ReturnCode_t set_expression_parameters(
             const char* new_expression,
             const std::vector<std::string>& new_expression_parameters);

@@ -18,6 +18,8 @@
 
 #include "ContentFilteredTopicImpl.hpp"
 
+#include <fastrtps/utils/md5.h>
+
 #include <fastdds/subscriber/DataReaderImpl.hpp>
 
 namespace eprosima {
@@ -56,7 +58,8 @@ ReturnCode_t ContentFilteredTopicImpl::set_expression_parameters(
             filter_property.filter_expression = new_expression;
         }
 
-        // TODO(Miguel C): update filter hash
+        // Update filter signature
+        update_signature();
 
         // Inform data readers
         for (DataReaderImpl* reader : readers_)
@@ -66,6 +69,47 @@ ReturnCode_t ContentFilteredTopicImpl::set_expression_parameters(
     }
 
     return ret;
+}
+
+void ContentFilteredTopicImpl::update_signature()
+{
+    MD5 md5;
+
+    md5.init();
+    // Add content_filtered_topic_name
+    {
+        const char* str = filter_property.content_filtered_topic_name.c_str();
+        MD5::size_type slen = static_cast<MD5::size_type>(strlen(str) + 1);
+        md5.update(str, slen);
+    }
+    // Add related_topic_name
+    {
+        const char* str = filter_property.related_topic_name.c_str();
+        MD5::size_type slen = static_cast<MD5::size_type>(strlen(str) + 1);
+        md5.update(str, slen);
+    }
+    // Add filter_class_name
+    {
+        const char* str = filter_property.filter_class_name.c_str();
+        MD5::size_type slen = static_cast<MD5::size_type>(strlen(str) + 1);
+        md5.update(str, slen);
+    }
+    // Add filter_expression
+    {
+        const char* str = filter_property.filter_expression.c_str();
+        MD5::size_type slen = static_cast<MD5::size_type>(strlen(str) + 1);
+        md5.update(str, slen);
+    }
+    // Add expression_parameters
+    for (const auto& param : filter_property.expression_parameters)
+    {
+        const char* str = param.c_str();
+        MD5::size_type slen = static_cast<MD5::size_type>(strlen(str) + 1);
+        md5.update(str, slen);
+    }
+    md5.finalize();
+
+    logError(TESTING, "content filter signature is " << md5);
 }
 
 } /* namespace dds */
